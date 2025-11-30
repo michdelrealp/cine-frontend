@@ -1,160 +1,258 @@
-/* GENERAL */
-.container {
-  font-family: "Segoe UI", Roboto, sans-serif;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-bottom: 40px;
-  color: #eee;
+/* 1. FUENTE Y CONFIGURACIÓN GENERAL */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+/* Esto asegura que el fondo cubra toda la pantalla en Angular */
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #09090b; /* Zinc 950: Fondo oscuro elegante */
+  color: #f5f5f5;
+  font-family: 'Inter', sans-serif;
+  --primary: #e50914; /* Rojo Netflix */
 }
 
-body {
-  background: #0e0e0e; /* estilo cine */
-  margin: 0;
+/* 2. FORZAR COLORES (Corrección para tus estilos inline) */
+h1, h2, h3, h4, p, span, label {
+  color: #f5f5f5 !important; /* El !important vence a tu style="color:black" */
 }
 
-/* NAVBAR */
+/* 3. NAVBAR */
 nav {
-  background: #1a1a1a;
-  color: white;
-  padding: 1rem 1.5rem;
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(10px); /* Efecto vidrio */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.2rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #ff0033;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  background: linear-gradient(45deg, #fff, #999);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Revertimos el !important solo para este gradiente */
+  color: transparent !important; 
 }
 
 nav button {
-  background: none;
-  border: none;
-  color: #f5f5f5;
-  cursor: pointer;
+  background: transparent;
+  color: #a1a1aa !important;
+  font-weight: 600;
   font-size: 1rem;
-  margin-left: 12px;
-  transition: color 0.3s;
+  margin-left: 20px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: 0.3s;
 }
 
 nav button:hover {
-  color: #ff0033;
+  background: rgba(255, 255, 255, 0.1);
+  color: white !important;
 }
 
-/* VIEWS */
-.view {
-  padding: 20px;
+/* 4. CONTENEDOR Y VISTAS */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-/* GRID DE PELÍCULAS */
+.view.home {
+  text-align: center;
+  padding-top: 40px;
+}
+
+.view.home h2 {
+  font-size: 3.5rem !important;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.view.home p {
+  font-size: 1.2rem !important;
+  color: #a1a1aa !important; /* Gris suave */
+  max-width: 600px;
+  margin: 10px auto;
+}
+
+/* 5. TARJETAS DE CARACTERÍSTICAS (HOME) */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 80px;
+}
+
+.feature-card {
+  background: #18181b; /* Zinc 900 */
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(229, 9, 20, 0.5);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  display: block;
+}
+
+/* 6. CATÁLOGO (GRID) */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 25px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
 }
 
-/* TARJETAS (POSTERS) */
 .card {
-  background: #1c1c1c;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 10px;
-  text-align: center;
-  border: 1px solid #262626;
-  transition: transform 0.25s, box-shadow 0.25s;
+  background: #18181b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
 .card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-  border-color: #ff0033;
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  z-index: 10;
+  border-color: var(--primary);
 }
 
 .card img {
   width: 100%;
-  height: 220px;
+  height: 280px;
   object-fit: cover;
-  border-radius: 8px;
+  opacity: 0.8;
+  transition: 0.3s;
 }
 
-/* DETALLE DE PELÍCULA */
+.card:hover img { opacity: 1; }
+
+.card h3 {
+  padding: 15px;
+  font-size: 1rem;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 7. DETALLE */
 .detail-content {
+  background: #18181b;
+  border-radius: 20px;
+  padding: 40px;
   display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  background: #1a1a1a;
-  padding: 20px;
+  gap: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.detail-image img {
   border-radius: 12px;
-  border: 1px solid #2a2a2a;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.detail-content img {
-  width: 220px;
-  border-radius: 10px;
+.detail-info h2 {
+  font-size: 3rem !important;
+  margin-top: 0;
+  line-height: 1;
 }
 
-/* FORMULARIOS */
-input, textarea {
-  display: block;
-  width: 100%;
-  background: #111;
-  color: #eee;
-  border: 1px solid #333;
-  margin-bottom: 12px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-input:focus, textarea:focus {
-  border-color: #ff0033;
-  outline: none;
-}
-
-/* BOTONES */
-button {
-  padding: 10px 18px;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-/* ESPECIALES */
-.btn-danger {
-  background: #e0002b;
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #ff0033;
-}
-
-.btn-secondary {
-  background: #3b3b3b;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #555;
-}
-
-/* ESTADOS */
-.error {
-  color: #ff4f4f;
-  margin-top: 10px;
+.badge-year {
+  background: rgba(255,255,255,0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+  color: var(--primary) !important;
   font-weight: bold;
 }
 
-.loading {
-  text-align: center;
-  margin-top: 50px;
-  font-size: 1.5rem;
-  color: #ccc;
+/* 8. BOTONES */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  transition: 0.2s;
 }
 
-.hidden {
-  display: none;
+/* Botones principales (Explorar, Guardar) */
+button:not(nav button):not(.btn-cancel):not(.btn-secondary) {
+  background-color: var(--primary);
+  color: white !important;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+/* Botón agregar */
+.btn-add {
+  background: white !important;
+  color: black !important;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Botones secundarios */
+.btn-cancel, .btn-secondary {
+  background: #27272a;
+  color: white !important;
+  padding: 10px 20px;
+}
+
+/* 9. INPUTS Y FORMULARIOS */
+.form-container {
+  background: #18181b;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+input, textarea {
+  width: 100%;
+  background: #09090b;
+  border: 1px solid #27272a;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* 10. RESPONSIVE */
+@media (max-width: 768px) {
+  .detail-content { flex-direction: column; }
+  .detail-image img { margin: 0 auto; display: block; }
+  .view.home h2 { font-size: 2.5rem !important; }
 }

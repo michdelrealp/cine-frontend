@@ -7,91 +7,103 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <div class="container">
+  
   <!-- MENÚ -->
   <nav>
-    <h1>🎬 CineApp</h1>
+    <div style="cursor: pointer;" (click)="navigate('home')">
+      <h1>🎬 CineApp</h1>
+    </div>
     <div>
       <button (click)="navigate('home')">Inicio</button>
       <button (click)="navigate('catalog')">Catálogo</button>
     </div>
   </nav>
 
-
-  <!-- HOME -->
+  <!-- VISTA: HOME -->
   <div *ngIf="currentView() === 'home'" class="view home">
-    <h2 style="color: #a12000; text-align: center;">Bienvenido al Catálogo de Películas</h2>
-    <p style="color:black; text-align: center;">Gestiona tu colección fácilmente.</p>
-    <p style="color:black; text-align: center;">Organiza, descubre y revive tus películas favoritas en una experiencia inmersiva.</p>
-    <button (click)="navigate('catalog')">Explorar Catálogo</button>
- 
-    <!-- Features (Tarjetas informativas debajo de la portada) -->
-    <div class="container">
-      <div class="features-grid">
-        <div class="feature-card">
-          <span class="feature-icon">🍿</span>
-          <h3 style="color: black;">Multimedia</h3>
-          <p style="color: black;">Trailers de YouTube integrados para cada película.</p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-icon">✨</span>
-          <h3 style="color: black;">Responsivo</h3>
-          <p style="color: black;">Disfruta tu colección en celular, tablet o PC.</p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-icon">🚀</span>
-          <h3 style="color: black;">Nube</h3>
-          <p style="color: black;">Integración con servicios de video externos.</p>
-        </div>
+    <!-- Portada Visual (Banner) -->
+    <div style="position: relative; margin-bottom: 40px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+      <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1625&auto=format&fit=crop" 
+           style="width: 100%; height: 300px; object-fit: cover; opacity: 0.6; display: block;" alt="Banner Cine">
+      <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4);">
+        <h2>Bienvenido a tu Colección</h2>
+        <p>Organiza, descubre y revive tus películas favoritas.</p>
+        <button (click)="navigate('catalog')" style="margin-top: 20px;">Explorar Catálogo</button>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🍿</span>
+        <h3>Multimedia</h3>
+        <p>Trailers de YouTube integrados para cada película.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">✨</span>
+        <h3>Responsivo</h3>
+        <p>Disfruta tu colección en celular, tablet o PC.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🚀</span>
+        <h3>Nube</h3>
+        <p>Integración con servicios de video externos.</p>
       </div>
     </div>
   </div>
 
-  <!-- CATÁLOGO -->
+  <!-- VISTA: CATÁLOGO -->
   <div *ngIf="currentView() === 'catalog'" class="view catalog">
-    <button (click)="goToAdd()" class="btn-add">+ Agregar Película</button>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="margin: 0;">Películas</h2>
+      <!-- CORRECCIÓN: Eliminada la clase 'btn-add' para usar el estilo rojo por defecto -->
+      <button (click)="goToAdd()">
+        <span style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px;">+</span> Agregar
+      </button>
+    </div>
+
     <div class="grid">
       <div *ngFor="let m of movies()" (click)="goToDetail(m)" class="card">
-        <img [src]="m.image" alt="Poster">
+        <img [src]="m.image" onerror="this.src='https://via.placeholder.com/300x450/1f1f1f/666?text=Sin+Imagen'" alt="Poster">
         <h3>{{ m.name }}</h3>
       </div>
     </div>
 
-   <!-- Mensaje si no hay películas -->
-    <div *ngIf="movies().length === 0" style="text-align: center; color: #666; margin-top: 50px;">
+    <!-- Mensaje vacío -->
+    <div *ngIf="movies().length === 0" style="text-align: center; color: #666; margin-top: 80px;">
+      <span style="font-size: 3rem; display: block; margin-bottom: 10px;">🎬</span>
       <p>No hay películas aún. ¡Agrega la primera!</p>
     </div>
   </div>
 
-  <!-- DETALLE -->
+  <!-- VISTA: DETALLE -->
   <div *ngIf="currentView() === 'detail' && selectedMovie()" class="view detail">
-    <button (click)="navigate('catalog')">← Regresar</button>
+    <button (click)="navigate('catalog')" class="btn-secondary" style="margin-bottom: 20px;">← Regresar</button>
     
     <div class="detail-content">
-
-      <!-- Columna Izquierda: Imagen y Streaming -->
+      <!-- Columna Izquierda -->
       <div class="detail-image">
         <img [src]="selectedMovie()!.image" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text=Sin+Imagen'">
         
-        <!-- Botones simulados de plataformas externas -->
-        <div class="streaming-links">
-            <p>Disponible en:</p>
-            <div class="platforms">
-                <button class="btn-netflix">Netflix</button>
-                <button class="btn-prime">Prime</button>
-            </div>
+        <div style="margin-top: 20px; display: grid; gap: 10px;">
+          <button style="background: #E50914; width: 100%;">Ver en Netflix</button>
+          <button style="background: #00A8E1; width: 100%;">Ver en Prime</button>
         </div>
       </div>
 
-      <!-- Columna Derecha: Info y Video -->
+      <!-- Columna Derecha -->
       <div class="detail-info">
         <h2>{{ selectedMovie()!.name }}</h2>
-        <span class="badge-year">{{ selectedMovie()!.year }}</span>
+        <div style="margin-bottom: 20px;">
+          <span class="badge-year">{{ selectedMovie()!.year }}</span>
+          <span style="margin-left: 10px; color: gold;">★ 8.5</span>
+        </div>
         
-        <!-- REPRODUCTOR DE VIDEO RESPONSIVO -->
-        <!-- Solo se muestra si hay una URL segura procesada -->
-        <div *ngIf="safeTrailerUrl()" class="video-container">
+        <!-- Video -->
+        <div *ngIf="safeTrailerUrl()" style="margin-bottom: 30px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
           <iframe 
             [src]="safeTrailerUrl()" 
+            style="width: 100%; aspect-ratio: 16/9;"
             title="YouTube video player" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -100,45 +112,59 @@
         </div>
 
         <h4>SINOPSIS</h4>
-        <p>{{ selectedMovie()!.synopsis }}</p>
+        <p style="margin-bottom: 30px; line-height: 1.6;">{{ selectedMovie()!.synopsis }}</p>
         
-        <div class="actions">
-          <button (click)="goToEdit(selectedMovie()!)" class="btn-edit">Editar</button>
-          <button (click)="deleteMovie(selectedMovie()!.id!)" class="btn-danger">Eliminar</button>
+        <div style="display: flex; gap: 15px;">
+          <button (click)="goToEdit(selectedMovie()!)" class="btn-secondary">Editar Datos</button>
+          <button (click)="deleteMovie(selectedMovie()!.id!)" style="background: transparent; border: 1px solid #ef4444; color: #ef4444 !important;">Eliminar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- FORMULARIO -->
-  <div *ngIf="currentView() === 'form'" class="container view">
-    <div class="form-container">
-      <h2 style="color: black;">{{ isEditing() ? 'Editar Película' : 'Agregar Nueva Película' }}</h2>
+  <!-- VISTA: FORMULARIO -->
+  <div *ngIf="currentView() === 'form'" class="view" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; display: flex; align-items: center; justify-content: center;">
+    <div class="form-container" style="width: 100%; max-width: 500px;">
+      <h2 style="margin-bottom: 20px;">{{ isEditing() ? 'Editar Película' : 'Nueva Película' }}</h2>
       
       <label>Título</label>
       <input [(ngModel)]="formData.name" placeholder="Ej: Gladiador 2">
       
-      <label>Año de estreno</label>
-      <input [(ngModel)]="formData.year" type="number" placeholder="Ej: 2024">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div>
+          <label>Año</label>
+          <input [(ngModel)]="formData.year" type="number" placeholder="2024">
+        </div>
+        <div>
+          <label>Rating (Opcional)</label>
+          <input type="number" placeholder="Ej: 8.5">
+        </div>
+      </div>
       
-      <label>URL de la Portada (Imagen)</label>
-      <input [(ngModel)]="formData.image" placeholder="Pegar link de imagen aquí...">
+      <label>URL Portada</label>
+      <input [(ngModel)]="formData.image" placeholder="https://...">
 
-      <!-- CAMPO NUEVO PARA EL VIDEO -->
-      <label>Link de YouTube (Trailer)</label>
-      <input [(ngModel)]="formData.trailer_url" placeholder="Ej: https://www.youtube.com/watch?v=...">
+      <label>URL Trailer (YouTube)</label>
+      <input [(ngModel)]="formData.trailer_url" placeholder="https://youtube.com/...">
       
       <label>Sinopsis</label>
-      <textarea [(ngModel)]="formData.synopsis" rows="5" placeholder="Escribe de qué trata..."></textarea>
+      <textarea [(ngModel)]="formData.synopsis" rows="4" placeholder="Resumen..."></textarea>
       
-      <div class="form-actions">
-        <button (click)="saveMovie()" class="btn-save">Guardar</button>
-        <button (click)="cancelForm()" class="btn-cancel">Cancelar</button>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button (click)="saveMovie()" style="flex: 1;">Guardar</button>
+        <button (click)="cancelForm()" class="btn-cancel" style="flex: 1;">Cancelar</button>
       </div>
     </div>
   </div>
-</div>
 
+  <!-- FOOTER -->
+  <footer style="margin-top: 80px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: #666; font-size: 0.9rem;">
+    <p style="margin-bottom: 5px; color: #a1a1aa;">PI. Aplicación web dinámica en un servicio de la nube</p>
+    <p>Desarrollado por: <strong>Alcantara Del Real Michelle</strong> | <br> LDSW - UDG </p>
+    <p style="font-size: 0.8rem; margin-top: 10px;">&copy; 2025 CineApp. Todos los derechos reservados.</p>
+  </footer>
+
+</div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
